@@ -1,0 +1,34 @@
+
+mysql> USE homework;
+mysql> SELECT first_name AS 'First Name', last_name AS 'Last Name' FROM employees;
+mysql> SELECT DISTINCT department_id from employees;
+mysql> SELECT * FROM employees ORDER BY first_name DESC;
+mysql> SELECT employee_id, first_name, last_name, salary FROM employees ORDER BY salary ASC;
+mysql> SELECT COUNT(*) FROM employees;
+mysql> SELECT first_name, last_name, salary FROM employees WHERE salary NOT BETWEEN 100000 and 15000;
+mysql> SELECT first_name, last_name, department_id FROM employees WHERE department_id IN (30, 100) ORDER BY department_id ASC;
+mysql> SELECT first_name, last_name, hire_date FROM employees WHERE YEAR(hire_date) LIKE 1987;
+mysql> SELECT last_name, job_id, salary FROM employees WHERE job_id IN ('IT_PROG', 'SH_CLERK') AND  salary NOT IN (4500, 10000, 15000);
+mysql> SELECT * FROM employees WHERE last_name IN ('BLAKE', 'SCOTT', 'KING', 'FORD’);
+mysql> SELECT SUM(salary) FROM employees;
+mysql> SELECT MIN(salary) FROM employees;
+mysql> SELECT AVG(salary), COUNT(employee_id) FROM employees WHERE department_id IN (90);
+mysql> SELECT job_id, COUNT(*) FROM employees GROUP BY job_id;
+mysql> SELECT job_id, AVG(salary) FROM employees WHERE job_id <> 'IT_PROG' GROUP BY job_id;
+
+Joins
+mysql> SELECT dep.department_name, dep.location_id, loc.street_address, loc.city, loc.state_province, co.country_name FROM departments AS dep INNER JOIN locations AS loc ON dep.location_id=loc.location_id INNER JOIN countries AS co ON loc.country_id=co.country_id;
+mysql> SELECT CONCAT_WS(' ', employees.first_name, employees.last_name) AS name, departments.department_name FROM employees INNER JOIN departments ON employees.department_id = departments.department_id;
+mysql> SELECT emp.employee_id 'Employee_Id', emp.last_name 'Employee',  man.employee_id 'Manager_Id', man.last_name 'Manager'  FROM employees emp  join employees man  ON (emp.manager_id = man.employee_id);
+mysql> SELECT employee_id, job_title, end_date-start_date 'Days' FROM job_history  NATURAL JOIN jobs  WHERE department_id=90;
+mysql> SELECT dep.department_name, emp.first_name, loc.city  FROM departments dep JOIN employees emp ON (dep.manager_id = emp.employee_id) JOIN locations loc USING (location_id);
+mysql> SELECT first_name, last_name, hire_date, salary,  (DATEDIFF(now(), hire_date))/365 Experience  FROM departments dep JOIN employees emp  ON (dep.manager_id = emp.employee_id)  WHERE (DATEDIFF(now(), hire_date))/365>15;
+
+Datetime
+
+mysql> SELECT date(((PERIOD_ADD (EXTRACT(YEAR_MONTH FROM CURDATE()),-3)*100)+1)) 'DAY';
+mysql> SELECT MAKEDATE(EXTRACT(YEAR FROM CURDATE()),1) "FIRST DAY OF THE CURRENT YEAR";
+mysql> SELECT DATE_FORMAT(CURDATE(),'%M %e, %Y') AS 'Current_date';
+mysql> SELECT first_name 'FIRST NAME', last_name 'LAST NAME' FROM employees WHERE MONTH(HIRE_DATE) = 6;
+mysql> SELECT FIRST_NAME, HIRE_DATE, DATEDIFF( SYSDATE(), hire_date )/365 'Experience' FROM employees;
+
